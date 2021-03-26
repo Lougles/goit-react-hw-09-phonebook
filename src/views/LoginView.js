@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { authOperations } from '../redux/auth';
 
 const styles = {
@@ -12,34 +12,27 @@ const styles = {
     marginBottom: 15,
   },
 };
-
-class LoginView extends Component {
-  state = {
+  const initialState = {
     email: '',
     password: '',
+};
+  
+const LoginView = () => {
+  const [user, setUser] = useState(initialState);
+  const dispatch = useDispatch();
+  const handleChange = ({ target: { name, value } }) => {
+    setUser((prevState) => ({...prevState, [name]: value }));
   };
-
-  handleChange = ({ target: { name, value } }) => {
-    this.setState({ [name]: value });
-  };
-
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-
-    this.props.onLogin(this.state);
-
-    this.setState({ name: '', email: '', password: '' });
+    dispatch(authOperations.logIn(user));
+    setUser(initialState);
   };
-
-  render() {
-    const { email, password } = this.state;
-
     return (
       <div>
         <h1>Авторизируйтесь чтобы войти</h1>
-
         <form
-          onSubmit={this.handleSubmit}
+          onSubmit={handleSubmit}
           style={styles.form}
           autoComplete="off"
         >
@@ -48,8 +41,8 @@ class LoginView extends Component {
             <input
               type="email"
               name="email"
-              value={email}
-              onChange={this.handleChange}
+              value={user.email}
+              onChange={handleChange}
             />
           </label>
 
@@ -58,20 +51,13 @@ class LoginView extends Component {
             <input
               type="password"
               name="password"
-              value={password}
-              onChange={this.handleChange}
+              value={user.password}
+              onChange={handleChange}
             />
           </label>
-
           <button className="Button" type="submit">Войти</button>
         </form>
       </div>
     );
   }
-}
-
-const mapDispatchToProps = {
-  onLogin: authOperations.logIn,
-};
-
-export default connect(null, mapDispatchToProps)(LoginView);
+export default LoginView;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Container from '../Components/Container/Container';
 import ContactForm from '../Components/ContactForm/ContactForm';
 import Filter from '../Components/Filter/Filter';
@@ -8,11 +8,7 @@ import { fetchContacts } from '../redux/contact/contact-operation';
 import {getLoading} from '../redux/contact/contact-selectors';
 
 
-class ContactView extends Component {
-
-  state = {
-
-  }
+const ContactView = () => {
 
   componentDidMount() {
     this.props.fetchContacts();
