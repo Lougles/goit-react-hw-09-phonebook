@@ -1,9 +1,9 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component, Suspense, lazy, useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import AppBar from './Components/AppBar';
 import Container from './Components/Container';
 import { authOperations } from './redux/auth';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import PrivateRoute from './Components/PrivateRoute';
 import PublicRoute from './Components/PublicRoute';
 
@@ -12,11 +12,13 @@ const RegisterView = lazy(() => import('./views/RegisterView'));
 const LoginView = lazy(() => import('./views/LoginView'));
 const ContactView = lazy(() => import('./views/ContactView'));
 
-class App extends Component {
-  componentDidMount() {
-    this.props.onGetCurrentUser();
-  }
-  render() {
+const App = () => {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, []);
     return (
       <Container>
         <AppBar />
@@ -45,9 +47,5 @@ class App extends Component {
       </Container>
     );
   }
-}
 const { getCurrentUser } = authOperations;
-const mapDispatchToProps = {
-  onGetCurrentUser: getCurrentUser,
-};
-export default connect(null, mapDispatchToProps)(App);
+export default App;

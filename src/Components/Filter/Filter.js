@@ -1,13 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addFilterValue } from '../../redux/contact/contact-actions';
-import { getError, getFilter } from '../../redux/contact/contact-selectors';
+import { getFilter } from '../../redux/contact/contact-selectors';
 
-const Filter = ({ filter, addFilterValue }) => {
+const Filter = () => {
+  const dispatch = useDispatch();
+  const filter = useSelector(getFilter);
+  
   const onHandleChange = (e) => {
-    addFilterValue(e.target.value)
+    dispatch(addFilterValue(e.target.value));
   }
-
   return (
     <label className="Searchbar">
       Поиск:
@@ -23,12 +25,4 @@ const Filter = ({ filter, addFilterValue }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  filter: getFilter(state),
-});
-
-const mapDispatchToProps = dispatch => ({
-  addFilterValue: value => dispatch(addFilterValue(value)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Filter);
+export default Filter;

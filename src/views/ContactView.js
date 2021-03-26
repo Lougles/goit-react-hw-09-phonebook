@@ -1,21 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Container from '../Components/Container/Container';
 import ContactForm from '../Components/ContactForm/ContactForm';
 import Filter from '../Components/Filter/Filter';
 import ContactList from '../Components/ContactList/ContactList';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchContacts } from '../redux/contact/contact-operation';
-import {getLoading} from '../redux/contact/contact-selectors';
-
 
 const ContactView = () => {
+  const dispatch = useDispatch();
 
-  componentDidMount() {
-    this.props.fetchContacts();
-  }
+  useEffect(() => {
+    dispatch(fetchContacts);
+  }, [])
 
-
-  render() {
     return (
       <Container>
         <ContactForm />
@@ -23,15 +20,5 @@ const ContactView = () => {
         <ContactList />
       </Container>
     );
-  }
 }
-
-const mapStateToProps = state => ({
-  isLoadingContacts: getLoading(state),
-})
-
-const mapDispatchToProps = {
-  fetchContacts: fetchContacts,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ContactView);
+export default ContactView;

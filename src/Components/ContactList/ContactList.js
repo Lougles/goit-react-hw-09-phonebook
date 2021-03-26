@@ -1,11 +1,17 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteContact } from '../../redux/contact/contact-operation';
 import {getFilteredContacts, getLoading} from '../../redux/contact/contact-selectors';
 
-const ContactList = ({ contacts, deleteContact, loading }) => {
+const ContactList = () => {
+
+  const dispatch = useDispatch();
+
+  const contacts = useSelector(getFilteredContacts);
+  const loading = useSelector(getLoading);
+  
   const onHandleChange = e => {
-    deleteContact(e.target.id);
+    dispatch(deleteContact(e.target.id));
   };
   return (
     <>
@@ -26,13 +32,4 @@ const ContactList = ({ contacts, deleteContact, loading }) => {
   );
 };
 
-const mapDispatchToProps = dispatch => ({
-  deleteContact: id => dispatch(deleteContact(id)),
-});
-
-const mapStateToProps = state => ({
-  contacts: getFilteredContacts(state),
-  loading: getLoading(state),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ContactList);
+export default ContactList;
